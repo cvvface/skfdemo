@@ -51,6 +51,14 @@ HashMap
 16、 HashMap的增删方法也和List一样有ConcurrentModificationException异常，使用迭代器需注意；
 17、 
 
+ConcurrentHashMap
+采用分离锁技术，同步容器中，是一个容器一个锁，但在ConcurrentHashMap中，会将hash表的数组部分分成若干段，每段维护一个锁，以达到高效的并发访问；
+ConcurrentHashMap具体是怎么实现线程安全的呢，肯定不可能是每个方法加synchronized，那样就变成了HashTable。
+
+从ConcurrentHashMap代码中可以看出，它引入了一个“分段锁”的概念，具体可以理解为把一个大的Map拆分成N个小的HashTable，根据key.hashCode()来决定把key放到哪个HashTable中。
+
+在ConcurrentHashMap中，就是把Map分成了N个Segment，put和get的时候，都是现根据key.hashCode()算出放到哪个Segment中：
+
 LinkedHashMap
 1、 HashMap的子类；
 2、 存储方式和HashMap都一样，只是在put元素的时候顺带存储了元素的存入先后顺序，在迭代器遍历的时候，输出的结果顺序是和插入元素时的插入先后顺序一致的；
